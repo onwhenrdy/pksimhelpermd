@@ -73,10 +73,15 @@ sanatize_filename <- function(file, sub = "X") {
 #' @examples
 extract_numbers_from_str <- function(x) {
   pat <- "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?"
-  m <- gregexpr(pat, x)
-  x <- lapply(regmatches(x,m),
+  x <- lapply(x,
               function(X) {
-                as.numeric(X)
+                m <- gregexpr(pat, X)
+                matches <- unlist(regmatches(X,m))
+                val <- matches[1]
+                if (length(val) == 0)
+                  val = NA
+
+                as.numeric(val)
               })
   unlist(x)
 }
